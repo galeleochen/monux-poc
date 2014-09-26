@@ -1,0 +1,15 @@
+body {
+  padding-top: 70px;
+}
+
+.table-borderless tbody tr td, .table-borderless thead tr th {
+  border: none;
+}
+
+.table-borderless td:first-child {
+  font-weight: bold;
+}
+
+table tfoot {
+  font-weight: bold;
+}
