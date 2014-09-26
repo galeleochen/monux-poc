@@ -32,7 +32,6 @@ Service.prototype.handleError = function (err) {
 
 
 var staticServices = [];
-exports.staticData = null;
 
 exports.createStaticService = function (name, service) {
   staticServices.push(new Service(name, service));
