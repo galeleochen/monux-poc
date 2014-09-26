@@ -40,6 +40,13 @@ app.get('/', function (req, res) {
 app.use(express.static(__dirname + '/web'));
 
 
+setInterval(function () {
+  wrappers.collectStreamServicesData(function (data) {
+    io.emit('data', data);
+  });
+}, 3000);
+
+
 wrappers.collectStaticServicesData(function (data) {
   staticData = data;
   server.listen(1337);
