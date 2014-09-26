@@ -5,9 +5,98 @@
     <title>Monux</title>
 
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
   </head>
   <body>
-    <h1>Hello World !</h1>
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="#">{{ kernel.name }}</a>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">System</div>
+            <div class="panel-body">
+              <table class="table table-borderless">
+                <tbody>
+                  <tr>
+                    <td>Name</td>
+                    <td>{{ kernel.name }}</td>
+                  </tr>
+                  <tr>
+                    <td>Kernel</td>
+                    <td>{{ kernel.release }}</td>
+                  </tr>
+                  <tr>
+                    <td>Architecture</td>
+                    <td>{{ kernel.arch }}</td>
+                  </tr>
+                  <tr>
+                    <td>CPU</td>
+                    <td>
+                      {{ cpu.name }}
+                      {% if cpu.arch64 %}64-bit{% endif %}
+                      <span class="badge">x{{ cpu.count }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>RAM</td>
+                    <td>{{ mem.ram }} KB</td>
+                  </tr>
+                  <tr>
+                    <td>Swap</td>
+                    <td>{{ mem.swap }} KB</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">Disk</div>
+            <div class="panel-body">
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th>Mount</th>
+                    <th>Size</th>
+                    <th>Used</th>
+                    <th>Free</th>
+                    <th>%used</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for part in disk.partitions %}
+                    <tr class="{% if part.percent > 95 %}danger{% elif part.percent > 75 %}warning{% else %}success{% endif %}">
+                      <td>{{ part.mount }}</td>
+                      <td>{{ part.size }}</td>
+                      <td>{{ part.used }}</td>
+                      <td>{{ part.free }}</td>
+                      <td>{{ part.percent }}%</td>
+                    </tr>
+                  {% endfor %}
+                </tbody>
+                <tfoot>
+                  <tr class="{% if disk.total.percent > 95 %}danger{% elif disk.total.percent > 75 %}warning{% else %}success{% endif %}">
+                    <td>Total</td>
+                    <td>{{ disk.total.size }}</td>
+                    <td>{{ disk.total.used }}</td>
+                    <td>{{ disk.total.free }}</td>
+                    <td>{{ disk.total.percent }}%</td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <script src="vendor/jquery.min.js"></script>
     <script src="vendor/lodash.min.js"></script>
