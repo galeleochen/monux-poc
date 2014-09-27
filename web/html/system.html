@@ -1,0 +1,52 @@
+<div class="panel panel-info">
+  <div class="panel-heading">System</div>
+  <div class="panel-body">
+    <table class="table table-borderless">
+      <tbody>
+        <tr>
+          <td>Name</td>
+          <td>{{ hostname }}</td>
+        </tr>
+        <tr>
+          <td>Kernel</td>
+          <td>{{ kernel.release }}</td>
+        </tr>
+        <tr>
+          <td>Architecture</td>
+          <td>{{ kernel.arch }}</td>
+        </tr>
+        <tr>
+          <td>CPUs</td>
+          <td>
+            {{ cpus.model }}
+            <span class="badge">x{{ cpus.count }}</span>
+          </td>
+        </tr>
+        <tr>
+          <td>Load</td>
+          <td>
+            <span class="load-m1">{{ load.m1 }}</span> <span class="label label-default">1m</span>
+            <span class="load-m5">{{ load.m5 }}</span> <span class="label label-default">5m</span>
+            <span class="load-m15">{{ load.m15 }}</span> <span class="label label-default">15m</span>
+          </td>
+        </tr>
+        <tr>
+          <td>RAM</td>
+          <td>
+            <span class="mem-used">{{ mem.used }}</span> /
+            <span class="mem-total">{{ mem.total }}</span> MB
+          </td>
+        </tr>
+        <tr>
+          <td>Uptime</td>
+          <td>
+            <span class="uptime-days">{{ uptime.days }}</span> <span class="label label-default">days</span>
+            <span class="uptime-hours">{{ uptime.hours }}</span> <span class="label label-default">hours</span>
+            <span class="uptime-minutes">{{ uptime.minutes }}</span> <span class="label label-default">minutes</span>
+            <span class="uptime-seconds">{{ uptime.seconds }}</span> <span class="label label-default">seconds</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

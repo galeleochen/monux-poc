@@ -18,145 +18,16 @@
 
     <div class="container-fluid">
       <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          {% include "html/system.html" %}
+        </div>
+      </div>
+      <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-info">
-            <div class="panel-heading">System</div>
-            <div class="panel-body">
-              <table class="table table-borderless">
-                <tbody>
-                  <tr>
-                    <td>Name</td>
-                    <td>{{ hostname }}</td>
-                  </tr>
-                  <tr>
-                    <td>Kernel</td>
-                    <td>{{ kernel.release }}</td>
-                  </tr>
-                  <tr>
-                    <td>Architecture</td>
-                    <td>{{ kernel.arch }}</td>
-                  </tr>
-                  <tr>
-                    <td>CPUs</td>
-                    <td>
-                      {{ cpus.model }}
-                      <span class="badge">x{{ cpus.count }}</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Load</td>
-                    <td>
-                      <span class="load-m1">{{ load.m1 }}</span>
-                      <span class="load-m5">{{ load.m5 }}</span>
-                      <span class="load-m15">{{ load.m15 }}</span>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>RAM</td>
-                    <td>
-                      <span class="mem-used">{{ mem.used }}</span> /
-                      <span class="mem-total">{{ mem.total }}</span> MB
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Uptime</td>
-                    <td>
-                      <span class="uptime-days">{{ uptime.days }}</span> days
-                      <span class="uptime-hours">{{ uptime.hours }}</span> hours
-                      <span class="uptime-minutes">{{ uptime.minutes }}</span> minutes
-                      <span class="uptime-seconds">{{ uptime.seconds }}</span> seconds
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          {% include "html/disks.html" %}
         </div>
         <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-info">
-            <div class="panel-heading">Disk</div>
-            <div class="panel-body">
-              <table class="table table-striped">
-                <thead>
-                  <tr>
-                    <th>Mount</th>
-                    <th>Size</th>
-                    <th>Used</th>
-                    <th>Free</th>
-                    <th>%used</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for part in disk.partitions %}
-                    <tr class="{% if part.percent > 95 %}danger{% elif part.percent > 75 %}warning{% else %}success{% endif %}">
-                      <td>{{ part.mount }}</td>
-                      <td>{{ part.size }}</td>
-                      <td>{{ part.used }}</td>
-                      <td>{{ part.free }}</td>
-                      <td>{{ part.percent }}%</td>
-                    </tr>
-                  {% endfor %}
-                </tbody>
-                <tfoot>
-                  <tr class="{% if disk.total.percent > 95 %}danger{% elif disk.total.percent > 75 %}warning{% else %}success{% endif %}">
-                    <td>Total</td>
-                    <td>{{ disk.total.size }}</td>
-                    <td>{{ disk.total.used }}</td>
-                    <td>{{ disk.total.free }}</td>
-                    <td>{{ disk.total.percent }}%</td>
-                  </tr>
-                </tfoot>
-              </table>
-            </div>
-          </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-info">
-            <div class="panel-heading">Interfaces</div>
-            <div class="panel-body">
-              <table class="table table-bordered table-striped">
-                <thead>
-                  <tr>
-                    <th>Name</th>
-                    <th>Address</th>
-                    <th>Family</th>
-                    <th>Internal</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {% for ifaceName, addresses in ifaces %}
-                    <tr>
-                      <td rowspan="{{ addresses.length }}">{{ ifaceName }}</td>
-                      <td>{{ addresses[0].address }}</td>
-                      <td>{{ addresses[0].family }}</td>
-                      <td>
-                        {% if addresses[0].internal %}
-                        <span class="label label-success">Yes</span>
-                        {% else %}
-                        <span class="label label-danger">No</span>
-                        {% endif %}
-                      </td>
-                    </tr>
-                    {% for address in addresses %}
-                      {% if not loop.first %}
-                        <tr>
-                          <td>{{ address.address }}</td>
-                          <td>{{ address.family }}</td>
-                          <td>
-                            {% if address.internal %}
-                              <span class="label label-success">Yes</span>
-                            {% else %}
-                              <span class="label label-danger">No</span>
-                            {% endif %}
-                          </td>
-                        </tr>
-                      {% endif %}
-                    {% endfor %}
-                  {% endfor %}
-                </tbody>
-              </table>
-            </div>
-          </div>
+          {% include "html/ifaces.html" %}
         </div>
       </div>
       <div class="row">

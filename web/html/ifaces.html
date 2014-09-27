@@ -1,0 +1,46 @@
+<div class="panel panel-info">
+  <div class="panel-heading">Interfaces</div>
+  <div class="panel-body">
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Address</th>
+          <th>Family</th>
+          <th>Internal</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for ifaceName, addresses in ifaces %}
+        <tr>
+          <td rowspan="{{ addresses.length }}">{{ ifaceName }}</td>
+          <td>{{ addresses[0].address }}</td>
+          <td>{{ addresses[0].family }}</td>
+          <td>
+            {% if addresses[0].internal %}
+            <span class="label label-success">Yes</span>
+            {% else %}
+            <span class="label label-danger">No</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% for address in addresses %}
+        {% if not loop.first %}
+        <tr>
+          <td>{{ address.address }}</td>
+          <td>{{ address.family }}</td>
+          <td>
+            {% if address.internal %}
+            <span class="label label-success">Yes</span>
+            {% else %}
+            <span class="label label-danger">No</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endif %}
+        {% endfor %}
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
