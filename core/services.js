@@ -58,6 +58,10 @@ exports.load = function (cb) {
   });
 };
 
+exports.ifaces = function (cb) {
+  cb(null, os.networkInterfaces());
+};
+
 exports.disk = function (done) {
   var res = {total: {}, partitions: []};
   var cmd = 'df -h --total';

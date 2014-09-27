@@ -18,6 +18,7 @@ wrappers.createStaticService('cpus', services.cpus);
 wrappers.createOnDemandService('uptime', services.uptime);
 wrappers.createOnDemandService('load', services.load);
 wrappers.createOnDemandService('mem', services.mem);
+wrappers.createOnDemandService('ifaces', services.ifaces);
 wrappers.createOnDemandService('disk', services.disk);
 
 wrappers.createStreamService('uptime', services.uptime);
