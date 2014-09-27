@@ -5,13 +5,13 @@
     <title>Monux</title>
 
     <link rel="stylesheet" href="vendor/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
-          <a class="navbar-brand" href="#">{{ kernel.name }}</a>
+          <a class="navbar-brand" href="#">{{ hostname }}</a>
         </div>
       </div>
     </nav>
@@ -26,7 +26,7 @@
                 <tbody>
                   <tr>
                     <td>Name</td>
-                    <td>{{ kernel.name }}</td>
+                    <td>{{ hostname }}</td>
                   </tr>
                   <tr>
                     <td>Kernel</td>
@@ -37,20 +37,35 @@
                     <td>{{ kernel.arch }}</td>
                   </tr>
                   <tr>
-                    <td>CPU</td>
+                    <td>CPUs</td>
                     <td>
-                      {{ cpu.name }}
-                      {% if cpu.arch64 %}64-bit{% endif %}
-                      <span class="badge">x{{ cpu.count }}</span>
+                      {{ cpus.model }}
+                      <span class="badge">x{{ cpus.count }}</span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Load</td>
+                    <td>
+                      <span class="load-m1">{{ load.m1 }}</span>
+                      <span class="load-m5">{{ load.m5 }}</span>
+                      <span class="load-m15">{{ load.m15 }}</span>
                     </td>
                   </tr>
                   <tr>
                     <td>RAM</td>
-                    <td>{{ mem.ram }} KB</td>
+                    <td>
+                      <span class="mem-used">{{ mem.used }}</span> /
+                      <span class="mem-total">{{ mem.total }}</span> MB
+                    </td>
                   </tr>
                   <tr>
-                    <td>Swap</td>
-                    <td>{{ mem.swap }} KB</td>
+                    <td>Uptime</td>
+                    <td>
+                      <span class="uptime-days">{{ uptime.days }}</span> days
+                      <span class="uptime-hours">{{ uptime.hours }}</span> hours
+                      <span class="uptime-minutes">{{ uptime.minutes }}</span> minutes
+                      <span class="uptime-seconds">{{ uptime.seconds }}</span> seconds
+                    </td>
                   </tr>
                 </tbody>
               </table>
@@ -96,6 +111,24 @@
           </div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">CPU</div>
+            <div class="panel-body">
+              <div id="cpuChart"></div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+          <div class="panel panel-info">
+            <div class="panel-heading">Memory</div>
+            <div class="panel-body">
+              <div id="memChart"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
 
     <script src="vendor/jquery.min.js"></script>
@@ -103,6 +136,7 @@
     <script src="vendor/bootstrap/js/bootstrap.min.js"></script>
     <script src="vendor/highstock.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
-    <script src="app.js"></script>
+    <script src="js/charts.js"></script>
+    <script src="js/main.js"></script>
   </body>
 </html>

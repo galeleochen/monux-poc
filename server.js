@@ -7,13 +7,22 @@ var logger = logmore('monux');
 logmore.enable('monux', 'info');
 
 
-var system = require('./core/services/system');
+var services = require('./core/services');
 
 var wrappers = require('./core/wrappers');
-wrappers.createStaticService('kernel', system.kernel);
-wrappers.createStaticService('cpu', system.cpu);
-wrappers.createStaticService('mem', system.mem);
-wrappers.createOnDemandService('disk', system.disk);
+
+wrappers.createStaticService('hostname', services.hostname);
+wrappers.createStaticService('kernel', services.kernel);
+wrappers.createStaticService('cpus', services.cpus);
+
+wrappers.createOnDemandService('uptime', services.uptime);
+wrappers.createOnDemandService('load', services.load);
+wrappers.createOnDemandService('mem', services.mem);
+wrappers.createOnDemandService('disk', services.disk);
+
+wrappers.createStreamService('uptime', services.uptime);
+wrappers.createStreamService('load', services.load);
+wrappers.createStreamService('mem', services.mem);
 
 var staticData = null;
 
@@ -44,7 +53,7 @@ setInterval(function () {
   wrappers.collectStreamServicesData(function (data) {
     io.emit('data', data);
   });
-}, 3000);
+}, 1000);
 
 
 wrappers.collectStaticServicesData(function (data) {
