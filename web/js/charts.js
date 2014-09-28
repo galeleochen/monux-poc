@@ -18,6 +18,7 @@
 
     $('#cpuChart').highcharts('StockChart', {
       chart: {
+        type: 'area',
         events: {
           load: function () {
             monux.charts.cpuPoints = this.series[0];
@@ -67,6 +68,7 @@
 
     $('#memChart').highcharts('StockChart', {
       chart: {
+        type: 'area',
         events: {
           load: function () {
             monux.charts.memPoints = this.series[0];
