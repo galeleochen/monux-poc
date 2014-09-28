@@ -23,6 +23,7 @@ wrappers.createOnDemandService('disk', services.disk);
 
 wrappers.createStreamService('uptime', services.uptime);
 wrappers.createStreamService('load', services.load);
+wrappers.createStreamService('cpusUsages', services.cpusUsages);
 wrappers.createStreamService('mem', services.mem);
 
 var staticData = null;

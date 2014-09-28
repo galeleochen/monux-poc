@@ -5,7 +5,7 @@
   var monux = window.monux;
 
   monux.charts = {};
-  monux.charts.cpuPoints = null;
+  monux.charts.cpuPoints = [];
   monux.charts.memPoints = null;
 
   monux.charts.init = function () {
@@ -16,57 +16,77 @@
       }
     });
 
-    $('#cpuChart').highcharts('StockChart', {
-      chart: {
-        events: {
-          load: function () {
-            monux.charts.cpuPoints = this.series[0];
+    $('.cpuChart').each(function (idx, slot) {
+      $(slot).highcharts('StockChart', {
+        chart: {
+          type: 'area',
+          events: {
+            load: function () {
+              monux.charts.cpuPoints[idx] = {
+                user: this.series[0],
+                sys: this.series[1],
+                idle: this.series[2]
+              };
+            }
           }
-        }
-      },
+        },
 
-      rangeSelector: {
-        buttons: [
+        legend: {
+          enabled: true
+        },
+
+        rangeSelector: {
+          buttons: [
+            {
+              count: 1,
+              type: 'minute',
+              text: '1M'
+            },
+            {
+              count: 5,
+              type: 'minute',
+              text: '5M'
+            },
+            {
+              type: 'all',
+              text: 'All'
+            }
+          ],
+          inputEnabled: false,
+          selected: 0
+        },
+
+        title: {
+          text: '%CPU'
+        },
+
+        series: [
           {
-            count: 1,
-            type: 'minute',
-            text: '1M'
+            name: 'user',
+            data: []
           },
           {
-            count: 5,
-            type: 'minute',
-            text: '5M'
+            name :'sys',
+            data: []
           },
           {
-            type: 'all',
-            text: 'All'
+            name: 'idle',
+            data: []
           }
         ],
-        inputEnabled: false,
-        selected: 0
-      },
 
-      title: {
-        text: '%CPU'
-      },
-
-      series: [
-        {
-          name: 'cpu',
-          data: []
-        }
-      ],
-
-      yAxis: [
-        {
-          min: 0,
-          max: 100
-        }
-      ]
+        yAxis: [
+          {
+            min: 0,
+            max: 100
+          }
+        ]
+      });
     });
 
     $('#memChart').highcharts('StockChart', {
       chart: {
+        type: 'area',
         events: {
           load: function () {
             monux.charts.memPoints = this.series[0];

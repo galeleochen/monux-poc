@@ -38,6 +38,56 @@ exports.cpus = function (cb) {
   });
 };
 
+exports.cpusUsages = (function () {
+  var prevTimes = [];
+
+  return function (cb) {
+    var cpus = os.cpus();
+    var usages = [];
+    _.forEach(cpus, function (cpu, idx) {
+      var prev = prevTimes[idx];
+      var curr = cpu.times;
+      curr.uptime = os.uptime();
+
+      if (prev) {
+        var user = curr.user * curr.uptime - prev.user * prev.uptime;
+        var sys = curr.sys * curr.uptime - prev.sys * prev.uptime;
+        var nice = curr.nice * curr.uptime - prev.nice * prev.uptime;
+        var irq = curr.irq * curr.uptime - prev.irq * prev.uptime;
+        var idle = curr.idle * curr.uptime - prev.idle * prev.uptime;
+
+        prev.user = curr.user;
+        prev.sys = curr.sys;
+        prev.nice = curr.nice;
+        prev.irq = curr.irq;
+        prev.idle = curr.idle;
+        prev.uptime = curr.uptime;
+
+        var total = user + sys + idle + nice + irq;
+        usages.push({
+          user: parseFloat((user * 100 / total).toFixed(2)),
+          sys: parseFloat((sys * 100 / total).toFixed(2)),
+          nice: parseFloat((nice * 100 / total).toFixed(2)),
+          irq: parseFloat((irq * 100 / total).toFixed(2)),
+          idle: parseFloat((idle * 100 / total).toFixed(2))
+        });
+      } else {
+        prevTimes[idx] = {
+          user: curr.user,
+          sys: curr.sys,
+          nice: curr.nice,
+          irq: curr.irq,
+          idle: curr.idle,
+          uptime: os.uptime()
+        };
+      }
+    });
+    console.log(usages);
+    console.log('\n');
+    cb(null, usages);
+  };
+})();
+
 exports.mem = function (cb) {
   var total = os.totalmem();
   var free = os.freemem();

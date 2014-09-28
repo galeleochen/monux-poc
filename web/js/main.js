@@ -37,12 +37,13 @@ $(function () {
     els.uptime.minutes.html(data.uptime.minutes);
     els.uptime.seconds.html(data.uptime.seconds);
 
-    if (monux.charts.cpuPoints) {
-      var cpuPoint = [
-        Date.now(),
-        data.load.m1 * 100
-      ];
-      monux.charts.cpuPoints.addPoint(cpuPoint, true);
+    if (data.cpusUsages.length === monux.charts.cpuPoints.length) {
+      monux.charts.cpuPoints.forEach(function (cpuPoints, idx) {
+        var usage = data.cpusUsages[idx];
+        cpuPoints.user.addPoint([Date.now(), usage.user], true);
+        cpuPoints.sys.addPoint([Date.now(), usage.sys], true);
+        cpuPoints.idle.addPoint([Date.now(), usage.idle], true);
+      });
     }
 
     if (monux.charts.memPoints) {

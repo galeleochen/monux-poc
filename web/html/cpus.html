@@ -1,0 +1,12 @@
+<div class="panel panel-info">
+  <div class="panel-heading">CPU</div>
+  <div class="panel-body">
+    <div class="row">
+      {% for idx in range(0, cpus.count) %}
+      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        <div class="cpuChart" id="cpuChart{{ loop.index0 }}"></div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
