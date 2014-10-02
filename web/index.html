@@ -8,37 +8,64 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-    <nav class="navbar navbar-inverse navbar-fixed-top">
+    <header class="navbar navbar-inverse navbar-fixed-top">
       <div class="container-fluid">
         <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbarCollapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
           <a class="navbar-brand" href="#">{{ hostname }}</a>
         </div>
+        <nav class="collapse navbar-collapse" id="navbarCollapse" role="navigation">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#generalPane" role="tab" data-toggle="tab">General</a></li>
+            <li><a href="#monitoringPane" role="tab" data-toggle="tab">Monitoring</a></li>
+          </ul>
+        </nav>
       </div>
-    </nav>
+    </header>
 
     <div class="container-fluid">
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          {% include "html/system.html" %}
+      <div class="tab-content">
+        <div class="tab-pane active" id="generalPane">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              {% include "html/system.html" %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+              {% include "html/disks.html" %}
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+              {% include "html/ifaces.html" %}
+            </div>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          {% include "html/disks.html" %}
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          {% include "html/ifaces.html" %}
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          {% include "html/cpus.html" %}
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-          <div class="panel panel-info">
-            <div class="panel-heading">Memory</div>
-            <div class="panel-body">
-              <div id="memChart"></div>
+        <div class="tab-pane" id="monitoringPane">
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+              <div class="panel panel-primary">
+                <div class="panel-heading">Memory</div>
+                <div class="panel-body">
+                  <div id="memChart"></div>
+                </div>
+              </div>
+            </div>
+            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+              <div class="panel panel-primary">
+                <div class="panel-heading">CPU</div>
+                <div class="panel-body">
+                  <div id="cpuChart"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              {% include "html/cpus.html" %}
             </div>
           </div>
         </div>

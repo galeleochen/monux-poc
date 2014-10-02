@@ -1,4 +1,5 @@
 var _ = require('lodash');
+require('./core/utils');
 
 
 var logmore = require('logmore');

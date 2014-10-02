@@ -5,7 +5,8 @@
   var monux = window.monux;
 
   monux.charts = {};
-  monux.charts.cpuPoints = [];
+  monux.charts.cpusPoints = [];
+  monux.charts.cpuPoints = null;
   monux.charts.memPoints = null;
 
   monux.charts.init = function () {
@@ -22,10 +23,11 @@
           type: 'area',
           events: {
             load: function () {
-              monux.charts.cpuPoints[idx] = {
+              monux.charts.cpusPoints[idx] = {
                 user: this.series[0],
                 sys: this.series[1],
-                idle: this.series[2]
+                nice: this.series[2],
+                irq: this.series[3]
               };
             }
           }
@@ -35,29 +37,10 @@
           enabled: true
         },
 
-        rangeSelector: {
-          buttons: [
-            {
-              count: 1,
-              type: 'minute',
-              text: '1M'
-            },
-            {
-              count: 5,
-              type: 'minute',
-              text: '5M'
-            },
-            {
-              type: 'all',
-              text: 'All'
-            }
-          ],
-          inputEnabled: false,
-          selected: 0
-        },
+        rangeSelector: false,
 
         title: {
-          text: '%CPU'
+          text: '%CPU ' + idx
         },
 
         series: [
@@ -70,7 +53,11 @@
             data: []
           },
           {
-            name: 'idle',
+            name: 'nice',
+            data: []
+          },
+          {
+            name: 'irq',
             data: []
           }
         ],
@@ -84,6 +71,58 @@
       });
     });
 
+    $('#cpuChart').highcharts('StockChart', {
+      chart: {
+        type: 'area',
+        events: {
+          load: function () {
+            monux.charts.cpuPoints = {
+              user: this.series[0],
+              sys: this.series[1],
+              nice: this.series[2],
+              irq: this.series[3]
+            };
+          }
+        }
+      },
+
+      legend: {
+        enabled: true
+      },
+
+      rangeSelector: false,
+
+      title: {
+        text: '%CPU'
+      },
+
+      series: [
+        {
+          name: 'user',
+          data: []
+        },
+        {
+          name :'sys',
+          data: []
+        },
+        {
+          name: 'nice',
+          data: []
+        },
+        {
+          name: 'irq',
+          data: []
+        }
+      ],
+
+      yAxis: [
+        {
+          min: 0,
+          max: 100
+        }
+      ]
+    });
+
     $('#memChart').highcharts('StockChart', {
       chart: {
         type: 'area',
@@ -94,26 +133,11 @@
         }
       },
 
-      rangeSelector: {
-        buttons: [
-          {
-            count: 1,
-            type: 'minute',
-            text: '1M'
-          },
-          {
-            count: 5,
-            type: 'minute',
-            text: '5M'
-          },
-          {
-            type: 'all',
-            text: 'All'
-          }
-        ],
-        inputEnabled: false,
-        selected: 0
+      legend: {
+        enabled: true
       },
+
+      rangeSelector: false,
 
       title: {
         text: '%RAM'
@@ -135,4 +159,3 @@
     });
   };
 })();
-

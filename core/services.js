@@ -39,52 +39,48 @@ exports.cpus = function (cb) {
 };
 
 exports.cpusUsages = (function () {
+  var metrics = ['user', 'sys', 'nice', 'irq', 'idle'];
   var prevTimes = [];
 
   return function (cb) {
     var cpus = os.cpus();
-    var usages = [];
+    var cpusCount = cpus.length;
+    var res = {total: {}, perCpu: []};
+
     _.forEach(cpus, function (cpu, idx) {
       var prev = prevTimes[idx];
       var curr = cpu.times;
-      curr.uptime = os.uptime();
+      var computed = {};
 
       if (prev) {
-        var user = curr.user * curr.uptime - prev.user * prev.uptime;
-        var sys = curr.sys * curr.uptime - prev.sys * prev.uptime;
-        var nice = curr.nice * curr.uptime - prev.nice * prev.uptime;
-        var irq = curr.irq * curr.uptime - prev.irq * prev.uptime;
-        var idle = curr.idle * curr.uptime - prev.idle * prev.uptime;
-
-        prev.user = curr.user;
-        prev.sys = curr.sys;
-        prev.nice = curr.nice;
-        prev.irq = curr.irq;
-        prev.idle = curr.idle;
-        prev.uptime = curr.uptime;
-
-        var total = user + sys + idle + nice + irq;
-        usages.push({
-          user: parseFloat((user * 100 / total).toFixed(2)),
-          sys: parseFloat((sys * 100 / total).toFixed(2)),
-          nice: parseFloat((nice * 100 / total).toFixed(2)),
-          irq: parseFloat((irq * 100 / total).toFixed(2)),
-          idle: parseFloat((idle * 100 / total).toFixed(2))
+        var total = 0;
+        _.forEach(metrics, function (metric) {
+          computed[metric] = curr[metric] - prev[metric];
+          prev[metric] = curr[metric];
+          total += computed[metric];
         });
+
+        _.forEach(metrics, function (metric) {
+          computed[metric] = _.toFixed(computed[metric] * 100 / total, 2);
+
+          if (!res.total[metric]) res.total[metric] = 0;
+          res.total[metric] += computed[metric];
+        });
+
+        res.perCpu.push(computed);
       } else {
-        prevTimes[idx] = {
-          user: curr.user,
-          sys: curr.sys,
-          nice: curr.nice,
-          irq: curr.irq,
-          idle: curr.idle,
-          uptime: os.uptime()
-        };
+        prevTimes[idx] = {};
+        _.forEach(metrics, function (metric) {
+          prevTimes[idx][metric] = curr[metric];
+        });
       }
     });
-    console.log(usages);
-    console.log('\n');
-    cb(null, usages);
+
+    _.forEach(_.keys(res.total), function (key) {
+      res.total[key] = _.toFixed(res.total[key] / cpusCount, 2);
+    });
+
+    cb(null, res);
   };
 })();
 
@@ -95,16 +91,16 @@ exports.mem = function (cb) {
   cb(null, {
     total: Math.round(total/1000000),
     used: Math.round(used/1000000),
-    percent: parseFloat(((used * 100) / total).toFixed(2))
+    percent: _.toFixed(used * 100 / total, 2)
   });
 };
 
 exports.load = function (cb) {
   var load = os.loadavg();
   cb(null, {
-    m1: parseFloat(load[0].toFixed(2)),
-    m5: parseFloat(load[1].toFixed(2)),
-    m15: parseFloat(load[2].toFixed(2))
+    m1: _.toFixed(load[0], 2),
+    m5: _.toFixed(load[1], 2),
+    m15: _.toFixed(load[2], 2)
   });
 };
 

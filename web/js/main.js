@@ -5,6 +5,9 @@ $(function () {
   var monux = window.monux;
 
   var els = {
+    controls: {
+      monitoring: $('a[href="#monitoringPane"]')
+    },
     load: {
       m1: $('.load-m1'),
       m5: $('.load-m5'),
@@ -24,6 +27,10 @@ $(function () {
 
   monux.charts.init();
 
+  els.controls.monitoring.on('shown.bs.tab', function onMonitoringShow() {
+    $(window).trigger('resize');
+  });
+
   var socket = io('/');
 
   socket.on('data', function (data) {
@@ -37,13 +44,22 @@ $(function () {
     els.uptime.minutes.html(data.uptime.minutes);
     els.uptime.seconds.html(data.uptime.seconds);
 
-    if (data.cpusUsages.length === monux.charts.cpuPoints.length) {
-      monux.charts.cpuPoints.forEach(function (cpuPoints, idx) {
-        var usage = data.cpusUsages[idx];
+    if (data.cpusUsages.perCpu.length === monux.charts.cpusPoints.length) {
+      monux.charts.cpusPoints.forEach(function (cpuPoints, idx) {
+        var usage = data.cpusUsages.perCpu[idx];
         cpuPoints.user.addPoint([Date.now(), usage.user], true);
         cpuPoints.sys.addPoint([Date.now(), usage.sys], true);
-        cpuPoints.idle.addPoint([Date.now(), usage.idle], true);
+        cpuPoints.nice.addPoint([Date.now(), usage.nice], true);
+        cpuPoints.irq.addPoint([Date.now(), usage.irq], true);
       });
+    }
+
+    if (monux.charts.cpuPoints) {
+      var usage = data.cpusUsages.total;
+      monux.charts.cpuPoints.user.addPoint([Date.now(), usage.user], true);
+      monux.charts.cpuPoints.sys.addPoint([Date.now(), usage.sys], true);
+      monux.charts.cpuPoints.nice.addPoint([Date.now(), usage.nice], true);
+      monux.charts.cpuPoints.irq.addPoint([Date.now(), usage.irq], true);
     }
 
     if (monux.charts.memPoints) {
