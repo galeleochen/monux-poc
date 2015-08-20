@@ -118,7 +118,7 @@ exports.disk = function (done) {
     rows.shift();
     _.forEach(rows, function (row) {
       row = row.trim();
-      var details = row.match(/([^\s]+)\s+([\d|,]+[G|M|K]*)\s+([\d|,]+[G|M|K]*)\s+([\d|,]+[G|M|K]*)\s+(\d+%)\s*(.*)/);
+      var details = row.match(/([^\s]+)\s+([\d|\.]+[G|M|K]*)\s+([\d|\.]+[G|M|K]*)\s+([\d|\.]+[G|M|K]*)\s+(\d+%)\s*(.*)/);
       if (details[1] === 'total') {
         res.total = _.zipObject(keys.slice(1, 5), details.slice(2, 6));
         res.total.percent = parseInt(res.total.percent.substring(0, res.total.percent.length - 1));
